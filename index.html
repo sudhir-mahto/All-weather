@@ -8,9 +8,30 @@
 
   <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  
+
+  <!-- Font Awesome (icons) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
   <!-- CSS File -->
   <link rel="stylesheet" href="style.css">
+
+  <!-- Admin Panel Styles -->
+  <style>
+    .admin-nav-item { transition: background 0.2s, color 0.2s; }
+    .admin-nav-item:hover { background: rgba(255,255,255,0.07) !important; color: #e2e8f0 !important; }
+    .admin-nav-item.active { background: #0f3460 !important; color: #fff !important; }
+    .admin-tab { display: none; }
+    .admin-tab.active { display: block; }
+    #adminPanel { display: none; }
+    #adminPanel.visible { display: block; }
+    #adminPasswordModal { display: none; }
+    #adminPasswordModal.visible { display: flex !important; }
+    #adminContactModal { display: none; }
+    #adminContactModal.visible { display: flex !important; }
+    #adminToast { display: none; }
+    #adminToast.visible { display: flex !important; }
+    .admin-tr-hover:hover { background: #f8fafc; cursor: pointer; }
+  </style>
 </head>
 <body>
 
@@ -21,23 +42,33 @@
         <img src="logo.png" alt="All Weather Solution">
         <span class="brand-name">All Weather Service</span>
       </div>
-      
+
       <div class="nav-links" id="navLinks">
         <a href="#home">Home</a>
         <a href="#services">Services</a>
+        <a href="#reviews">Reviews</a>
         <a href="#contact">Contact</a>
+        <a href="#" class="nav-book-btn" id="navBookBtn">Book Service</a>
+        <button id="adminEntryNavBtn" style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);color:rgba(255,255,255,0.7);font-size:12px;cursor:pointer;padding:6px 14px;border-radius:20px;font-family:inherit;font-weight:500;transition:all 0.2s;">&#9881; Admin</button>
       </div>
 
-      <button class="hamburger" id="hamburger">☰</button>
+      <button class="hamburger" id="hamburger">&#9776;</button>
     </div>
   </nav>
 
   <!-- Hero Section -->
   <header id="home" class="hero">
     <div class="container">
-      <h1>Beat the Heat – Bring the Cool!!</h1>
-      <p>Fast & Reliable AC Repair, Installation & Maintenance Services in Buxar & Nearby Areas</p>
-      <a href="tel:+919661332544" class="btn">Call Now: +91 96613 32544</a>
+      <h1>Beat the Heat &#8211; Bring the Cool!!</h1>
+      <p>Fast &amp; Reliable AC Repair, Installation &amp; Maintenance Services in Buxar &amp; Nearby Areas</p>
+      <div class="hero-buttons">
+        <a href="tel:+919661332544" class="btn">
+          <i class="fas fa-phone-alt"></i> Call Now: +91 96613 32544
+        </a>
+        <button class="btn btn-outline" id="heroBookBtn">
+          <i class="fas fa-calendar-check"></i> Book Service Online
+        </button>
+      </div>
     </div>
   </header>
 
@@ -45,64 +76,961 @@
   <section id="services">
     <div class="container">
       <h2>Our Services</h2>
-      <div class="services-grid">
-        <div class="card">
+      <p class="section-subtitle">Professional AC services at your doorstep in Buxar</p>
+
+      <!-- Dynamic services loaded from API; fallback static cards shown below -->
+      <div class="services-grid" id="servicesGrid">
+        <!-- Static fallback cards (shown if API fails) -->
+        <div class="card" data-static="true">
+          <div class="card-icon"><i class="fas fa-snowflake"></i></div>
           <h3>Split AC Repair</h3>
-          <p>Gas Filling, PCB Repair, Cooling Problems, Compressor Issues – Starting from ₹500</p>
+          <p>Gas Filling, PCB Repair, Cooling Problems, Compressor Issues</p>
+          <div class="card-price">Starting &#8377;500</div>
+          <button class="btn-book-service" data-service="Split AC Repair">Book Now</button>
         </div>
-        <div class="card">
+        <div class="card" data-static="true">
+          <div class="card-icon"><i class="fas fa-wind"></i></div>
           <h3>Window AC Service</h3>
-          <p>Complete Cleaning, Repair & Maintenance – Quick & Affordable</p>
+          <p>Complete Cleaning, Repair &amp; Maintenance &#8211; Quick &amp; Affordable</p>
+          <div class="card-price">Starting &#8377;400</div>
+          <button class="btn-book-service" data-service="Window AC Service">Book Now</button>
         </div>
-        <div class="card">
+        <div class="card" data-static="true">
+          <div class="card-icon"><i class="fas fa-tools"></i></div>
           <h3>AC Installation</h3>
-          <p>New AC Fitting, Testing & Setup – Same Day Service Available</p>
+          <p>New AC Fitting, Testing &amp; Setup &#8211; Same Day Service Available</p>
+          <div class="card-price">Call for Quote</div>
+          <button class="btn-book-service" data-service="AC Installation">Book Now</button>
         </div>
-        <div class="card">
+        <div class="card" data-static="true">
+          <div class="card-icon"><i class="fas fa-calendar-check"></i></div>
           <h3>Annual Maintenance Contract (AMC)</h3>
-          <p>4 Professional Services Per Year – Only ₹2000</p>
+          <p>4 Professional Services Per Year &#8211; Only &#8377;2000</p>
+          <div class="card-price">&#8377;2000/year</div>
+          <button class="btn-book-service" data-service="Annual Maintenance Contract (AMC)">Book Now</button>
+        </div>
+        <div class="card" data-static="true">
+          <div class="card-icon"><i class="fas fa-thermometer-half"></i></div>
+          <h3>AC Gas Refill</h3>
+          <p>R22, R32, R410A Refrigerant Gas Refilling with Leak Testing</p>
+          <div class="card-price">Starting &#8377;800</div>
+          <button class="btn-book-service" data-service="AC Gas Refill">Book Now</button>
+        </div>
+        <div class="card" data-static="true">
+          <div class="card-icon"><i class="fas fa-broom"></i></div>
+          <h3>AC Deep Cleaning</h3>
+          <p>High-Pressure Foam Wash, Anti-Bacterial Treatment, Coil Cleaning</p>
+          <div class="card-price">Starting &#8377;600</div>
+          <button class="btn-book-service" data-service="AC Deep Cleaning">Book Now</button>
         </div>
       </div>
     </div>
   </section>
 
- <!-- Contact Section - Updated -->
-<section id="contact">
-  <div class="container">
-    <h2>Contact Us - S.K Electronics</h2>
-    
-    <div class="contact-info">
-      <p><strong>Call or WhatsApp:</strong></p>
-      <a href="tel:+919661332544" class="phone-number">
-        <i class="fas fa-phone-alt"></i> +91 96613 32544
-      </a>
-    </div>
+  <!-- Reviews Section -->
+  <section id="reviews" class="reviews-section">
+    <div class="container">
+      <h2>Customer Reviews</h2>
+      <p class="section-subtitle">What our customers in Buxar say about us</p>
 
-    <div class="location-share">
-      <button id="shareLocationBtn" class="location-btn">
-        <i class="fas fa-location-arrow"></i> 
-        Share My Live Location
-      </button>
-      <p class="note">Button dabakar apni current location bhej dein</p>
-    </div>
+      <div class="reviews-grid" id="reviewsGrid">
+        <!-- Reviews loaded from API or shown as loading state -->
+        <div class="review-loading">
+          <i class="fas fa-spinner fa-spin"></i> Loading reviews...
+        </div>
+      </div>
 
-    <div class="static-location">
-      <i class="fas fa-map-marker-alt"></i>
-      <p><strong>Buxar, Bihar</strong></p>
-      <p>Fast Home Service Available</p>
+      <!-- Submit Review Button -->
+      <div class="review-cta">
+        <p>Satisfied with our service?</p>
+        <button class="btn-secondary" id="openReviewBtn">
+          <i class="fas fa-star"></i> Write a Review
+        </button>
+      </div>
     </div>
-  </div>
-</section>
+  </section>
+
+  <!-- Contact Section -->
+  <section id="contact">
+    <div class="container">
+      <h2>Contact Us - S.K Electronics</h2>
+      <p class="section-subtitle">Reach us via call, WhatsApp, or the form below</p>
+
+      <div class="contact-layout">
+
+        <!-- Left: Contact Info -->
+        <div class="contact-left">
+          <div class="contact-info">
+            <p><strong>Call or WhatsApp:</strong></p>
+            <a href="tel:+919661332544" class="phone-number">
+              <i class="fas fa-phone-alt"></i> +91 96613 32544
+            </a>
+          </div>
+
+          <div class="whatsapp-btn-wrap">
+            <a href="https://wa.me/919661332544?text=Hello%20All%20Weather%20Solution%2C%20I%20need%20AC%20service."
+               target="_blank" class="whatsapp-btn">
+              <i class="fab fa-whatsapp"></i> Chat on WhatsApp
+            </a>
+          </div>
+
+          <div class="location-share">
+            <button id="shareLocationBtn" class="location-btn">
+              <i class="fas fa-location-arrow"></i>
+              Share My Live Location
+            </button>
+            <p class="note">Button dabakar apni current location bhej dein</p>
+          </div>
+
+          <div class="static-location">
+            <i class="fas fa-map-marker-alt"></i>
+            <p><strong>Buxar, Bihar</strong></p>
+            <p>Fast Home Service Available</p>
+          </div>
+        </div>
+
+        <!-- Right: Contact Form -->
+        <div class="contact-right">
+          <h3 class="form-heading">Send us a Message</h3>
+          <form id="contactForm" class="contact-form" novalidate>
+            <div class="form-group">
+              <label for="contactName">Your Name *</label>
+              <input type="text" id="contactName" name="name" placeholder="Aapka naam" required minlength="2" maxlength="100">
+              <span class="field-error" id="contactNameError"></span>
+            </div>
+            <div class="form-group">
+              <label for="contactPhone">Mobile Number *</label>
+              <input type="tel" id="contactPhone" name="phone" placeholder="10-digit mobile number" required pattern="[6-9][0-9]{9}">
+              <span class="field-error" id="contactPhoneError"></span>
+            </div>
+            <div class="form-group">
+              <label for="contactEmail">Email (optional)</label>
+              <input type="email" id="contactEmail" name="email" placeholder="yourname@example.com">
+            </div>
+            <div class="form-group">
+              <label for="contactMessage">Message *</label>
+              <textarea id="contactMessage" name="message" rows="4" placeholder="AC ki kya samasya hai? Batayein..." required minlength="10" maxlength="1000"></textarea>
+              <span class="field-error" id="contactMessageError"></span>
+            </div>
+            <button type="submit" class="btn-submit" id="contactSubmitBtn">
+              <i class="fas fa-paper-plane"></i> Send Message
+            </button>
+            <div class="form-feedback" id="contactFeedback"></div>
+          </form>
+        </div>
+
+      </div>
+    </div>
+  </section>
 
   <!-- Footer -->
   <footer>
     <div class="container">
       <p>&copy; 2026 All Weather Solution | Buxar, Bihar</p>
-      <p>Professional AC Repair Services • Made with ❤️ for Buxar</p>
+      <p>Professional AC Repair Services &bull; Made with &#10084;&#65039; for Buxar</p>
+      <button id="adminEntryBtn" style="background:none;border:none;color:rgba(255,255,255,0.2);font-size:11px;cursor:pointer;margin-top:8px;font-family:inherit;">Admin</button>
     </div>
   </footer>
 
+  <!-- ====================== BOOKING MODAL ====================== -->
+  <div class="modal-overlay" id="bookingModalOverlay" role="dialog" aria-modal="true" aria-labelledby="bookingModalTitle">
+    <div class="modal">
+      <div class="modal-header">
+        <h3 id="bookingModalTitle"><i class="fas fa-calendar-check"></i> Book AC Service</h3>
+        <button class="modal-close" id="closeBookingModal" aria-label="Close">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form id="bookingForm" novalidate>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="bookingName">Your Name *</label>
+              <input type="text" id="bookingName" name="customerName" placeholder="Aapka poora naam" required minlength="2" maxlength="100">
+              <span class="field-error" id="bookingNameError"></span>
+            </div>
+            <div class="form-group">
+              <label for="bookingPhone">Mobile Number *</label>
+              <input type="tel" id="bookingPhone" name="phone" placeholder="10-digit mobile number" required pattern="[6-9][0-9]{9}">
+              <span class="field-error" id="bookingPhoneError"></span>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="bookingEmail">Email (optional)</label>
+            <input type="email" id="bookingEmail" name="email" placeholder="yourname@example.com">
+          </div>
+          <div class="form-group">
+            <label for="bookingAddress">Your Address *</label>
+            <input type="text" id="bookingAddress" name="address" placeholder="Mohalla, landmark, Buxar..." required maxlength="300">
+            <span class="field-error" id="bookingAddressError"></span>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="bookingService">Service Required *</label>
+              <select id="bookingService" name="serviceType" required>
+                <option value="">-- Select Service --</option>
+                <option value="Split AC Repair">Split AC Repair</option>
+                <option value="Window AC Service">Window AC Service</option>
+                <option value="AC Installation">AC Installation</option>
+                <option value="Annual Maintenance Contract (AMC)">Annual Maintenance Contract (AMC)</option>
+                <option value="AC Gas Refill">AC Gas Refill</option>
+                <option value="AC Deep Cleaning">AC Deep Cleaning</option>
+                <option value="Other">Other</option>
+              </select>
+              <span class="field-error" id="bookingServiceError"></span>
+            </div>
+            <div class="form-group">
+              <label for="bookingDate">Preferred Date</label>
+              <input type="date" id="bookingDate" name="preferredDate">
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="bookingNotes">Additional Notes</label>
+            <textarea id="bookingNotes" name="notes" rows="3" placeholder="AC ki kya problem hai? Koi vishesh jaankari..."></textarea>
+          </div>
+          <button type="submit" class="btn-submit full-width" id="bookingSubmitBtn">
+            <i class="fas fa-check-circle"></i> Confirm Booking
+          </button>
+          <div class="form-feedback" id="bookingFeedback"></div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- ====================== REVIEW MODAL ====================== -->
+  <div class="modal-overlay" id="reviewModalOverlay" role="dialog" aria-modal="true" aria-labelledby="reviewModalTitle">
+    <div class="modal modal-sm">
+      <div class="modal-header">
+        <h3 id="reviewModalTitle"><i class="fas fa-star"></i> Write a Review</h3>
+        <button class="modal-close" id="closeReviewModal" aria-label="Close">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form id="reviewForm" novalidate>
+          <div class="form-group">
+            <label for="reviewName">Your Name *</label>
+            <input type="text" id="reviewName" name="customerName" placeholder="Aapka naam" required minlength="2" maxlength="100">
+            <span class="field-error" id="reviewNameError"></span>
+          </div>
+          <div class="form-group">
+            <label>Rating *</label>
+            <div class="star-rating" id="starRating" role="group" aria-label="Star rating">
+              <button type="button" class="star" data-value="1" aria-label="1 star">&#9733;</button>
+              <button type="button" class="star" data-value="2" aria-label="2 stars">&#9733;</button>
+              <button type="button" class="star" data-value="3" aria-label="3 stars">&#9733;</button>
+              <button type="button" class="star" data-value="4" aria-label="4 stars">&#9733;</button>
+              <button type="button" class="star" data-value="5" aria-label="5 stars">&#9733;</button>
+            </div>
+            <input type="hidden" id="reviewRating" name="rating" value="0">
+            <span class="field-error" id="reviewRatingError"></span>
+          </div>
+          <div class="form-group">
+            <label for="reviewService">Service Received</label>
+            <select id="reviewService" name="serviceType">
+              <option value="">-- Select Service --</option>
+              <option value="Split AC Repair">Split AC Repair</option>
+              <option value="Window AC Service">Window AC Service</option>
+              <option value="AC Installation">AC Installation</option>
+              <option value="Annual Maintenance Contract (AMC)">Annual Maintenance Contract (AMC)</option>
+              <option value="AC Gas Refill">AC Gas Refill</option>
+              <option value="AC Deep Cleaning">AC Deep Cleaning</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="reviewComment">Your Review *</label>
+            <textarea id="reviewComment" name="comment" rows="4" placeholder="Service kaisi lagi? Apna anubhav batayein..." required minlength="10" maxlength="500"></textarea>
+            <span class="field-error" id="reviewCommentError"></span>
+          </div>
+          <button type="submit" class="btn-submit full-width" id="reviewSubmitBtn">
+            <i class="fas fa-paper-plane"></i> Submit Review
+          </button>
+          <div class="form-feedback" id="reviewFeedback"></div>
+        </form>
+      </div>
+    </div>
+  </div>
+
   <!-- JavaScript File -->
   <script src="script.js"></script>
+
+  <!-- ====================== ADMIN PANEL ====================== -->
+
+  <!-- PASSWORD MODAL -->
+  <div id="adminPasswordModal" style="position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:9000;align-items:center;justify-content:center;">
+    <div style="background:#fff;border-radius:16px;padding:40px;width:340px;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.3);">
+      <div style="width:60px;height:60px;background:linear-gradient(135deg,#00aaff,#0088cc);border-radius:14px;margin:0 auto 20px;display:flex;align-items:center;justify-content:center;font-size:26px;color:#fff;">&#128272;</div>
+      <h3 style="margin-bottom:8px;color:#1a202c;">Admin Access</h3>
+      <p style="color:#718096;font-size:13px;margin-bottom:20px;">Enter password to continue</p>
+      <input type="password" id="adminPasswordInput" placeholder="Password" style="width:100%;padding:12px 16px;border:2px solid #e2e8f0;border-radius:10px;font-size:14px;font-family:inherit;outline:none;margin-bottom:10px;box-sizing:border-box;">
+      <div id="adminPasswordError" style="color:#e53e3e;font-size:12px;margin-bottom:10px;display:none;">Incorrect password</div>
+      <button id="adminPasswordSubmit" style="width:100%;padding:12px;background:#00aaff;color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;">Login</button>
+      <button id="adminPasswordCancel" style="width:100%;padding:12px;background:none;color:#718096;border:none;font-size:13px;cursor:pointer;margin-top:8px;font-family:inherit;">Cancel</button>
+    </div>
+  </div>
+
+  <!-- ADMIN PANEL OVERLAY -->
+  <div id="adminPanel" style="position:fixed;inset:0;z-index:8000;font-family:'Poppins',sans-serif;">
+    <!-- Sidebar -->
+    <div id="adminSidebar" style="position:fixed;top:0;left:0;width:240px;height:100vh;background:#1a1a2e;display:flex;flex-direction:column;z-index:8001;box-shadow:4px 0 20px rgba(0,0,0,0.3);">
+      <div style="padding:20px 20px 16px;border-bottom:1px solid rgba(255,255,255,0.07);">
+        <div style="display:flex;align-items:center;gap:10px;">
+          <div style="width:38px;height:38px;background:linear-gradient(135deg,#00aaff,#0088cc);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;color:#fff;flex-shrink:0;">&#10052;&#65039;</div>
+          <div>
+            <div style="font-size:13px;font-weight:700;color:#fff;line-height:1.2;">All Weather</div>
+            <div style="font-size:10px;color:#a8b2d8;">Admin Panel</div>
+          </div>
+        </div>
+      </div>
+      <nav style="flex:1;padding:12px;" id="adminNav">
+        <div class="admin-nav-item active" data-tab="adminDashboard" style="display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:8px;cursor:pointer;color:#a8b2d8;font-size:13px;font-weight:500;margin-bottom:2px;">
+          <i class="fas fa-chart-bar" style="width:16px;text-align:center;"></i> Dashboard
+        </div>
+        <div class="admin-nav-item" data-tab="adminBookings" style="display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:8px;cursor:pointer;color:#a8b2d8;font-size:13px;font-weight:500;margin-bottom:2px;">
+          <i class="fas fa-calendar-check" style="width:16px;text-align:center;"></i> Bookings <span id="adminNavBookingBadge" style="margin-left:auto;background:#00aaff;color:#fff;font-size:10px;font-weight:700;min-width:18px;height:18px;border-radius:9px;display:none;align-items:center;justify-content:center;padding:0 4px;"></span>
+        </div>
+        <div class="admin-nav-item" data-tab="adminContacts" style="display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:8px;cursor:pointer;color:#a8b2d8;font-size:13px;font-weight:500;margin-bottom:2px;">
+          <i class="fas fa-envelope" style="width:16px;text-align:center;"></i> Contacts <span id="adminNavContactBadge" style="margin-left:auto;background:#ff8c00;color:#fff;font-size:10px;font-weight:700;min-width:18px;height:18px;border-radius:9px;display:none;align-items:center;justify-content:center;padding:0 4px;"></span>
+        </div>
+        <div class="admin-nav-item" data-tab="adminReviews" style="display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:8px;cursor:pointer;color:#a8b2d8;font-size:13px;font-weight:500;margin-bottom:2px;">
+          <i class="fas fa-star" style="width:16px;text-align:center;"></i> Reviews <span id="adminNavReviewBadge" style="margin-left:auto;background:#8000ff;color:#fff;font-size:10px;font-weight:700;min-width:18px;height:18px;border-radius:9px;display:none;align-items:center;justify-content:center;padding:0 4px;"></span>
+        </div>
+      </nav>
+      <div style="padding:12px 20px;border-top:1px solid rgba(255,255,255,0.07);">
+        <button id="adminCloseBtn" style="width:100%;padding:10px;background:rgba(255,255,255,0.07);color:#a8b2d8;border:none;border-radius:8px;font-size:12px;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:8px;transition:all 0.2s;">
+          <i class="fas fa-arrow-left"></i> Back to Website
+        </button>
+      </div>
+    </div>
+
+    <!-- Main area -->
+    <div style="margin-left:240px;height:100vh;overflow-y:auto;background:#f0f4f8;">
+      <!-- Topbar -->
+      <div style="height:60px;background:#fff;border-bottom:1px solid #e2e8f0;display:flex;align-items:center;justify-content:space-between;padding:0 24px;position:sticky;top:0;z-index:100;box-shadow:0 1px 3px rgba(0,0,0,0.08);">
+        <span id="adminPageTitle" style="font-size:16px;font-weight:600;color:#1a202c;">Dashboard</span>
+        <div style="display:flex;align-items:center;gap:12px;">
+          <span id="adminRefreshCountdown" style="font-size:11px;color:#a0aec0;">Auto-refresh in 30s</span>
+          <button id="adminRefreshBtn" style="display:flex;align-items:center;gap:6px;padding:7px 14px;background:rgba(0,170,255,0.1);border:1px solid rgba(0,170,255,0.3);color:#00aaff;border-radius:8px;cursor:pointer;font-size:12px;font-family:inherit;font-weight:500;">
+            <i class="fas fa-sync-alt" id="adminRefreshIcon"></i> Refresh
+          </button>
+        </div>
+      </div>
+
+      <!-- Content -->
+      <div style="padding:24px;">
+
+        <!-- DASHBOARD TAB -->
+        <div id="adminDashboard" class="admin-tab active">
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:24px;">
+            <div style="background:#fff;border-radius:12px;padding:20px;display:flex;align-items:center;gap:14px;box-shadow:0 1px 3px rgba(0,0,0,0.08);border:1px solid #e2e8f0;">
+              <div style="width:50px;height:50px;border-radius:12px;background:rgba(0,170,255,0.1);color:#00aaff;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;"><i class="fas fa-calendar-check"></i></div>
+              <div><div id="statTotalBookings" style="font-size:26px;font-weight:700;color:#1a202c;line-height:1;">&#8212;</div><div style="font-size:12px;color:#718096;margin-top:3px;">Total Bookings</div></div>
+            </div>
+            <div style="background:#fff;border-radius:12px;padding:20px;display:flex;align-items:center;gap:14px;box-shadow:0 1px 3px rgba(0,0,0,0.08);border:1px solid #e2e8f0;">
+              <div style="width:50px;height:50px;border-radius:12px;background:rgba(255,140,0,0.1);color:#ff8c00;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;"><i class="fas fa-envelope"></i></div>
+              <div><div id="statUnreadContacts" style="font-size:26px;font-weight:700;color:#1a202c;line-height:1;">&#8212;</div><div style="font-size:12px;color:#718096;margin-top:3px;">Unread Messages</div></div>
+            </div>
+            <div style="background:#fff;border-radius:12px;padding:20px;display:flex;align-items:center;gap:14px;box-shadow:0 1px 3px rgba(0,0,0,0.08);border:1px solid #e2e8f0;">
+              <div style="width:50px;height:50px;border-radius:12px;background:rgba(128,0,255,0.1);color:#8000ff;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;"><i class="fas fa-star"></i></div>
+              <div><div id="statPendingReviews" style="font-size:26px;font-weight:700;color:#1a202c;line-height:1;">&#8212;</div><div style="font-size:12px;color:#718096;margin-top:3px;">Pending Reviews</div></div>
+            </div>
+          </div>
+          <div style="background:#fff;border-radius:12px;box-shadow:0 1px 3px rgba(0,0,0,0.08);border:1px solid #e2e8f0;overflow:hidden;">
+            <div style="padding:16px 20px;border-bottom:1px solid #e2e8f0;font-size:14px;font-weight:600;color:#1a202c;display:flex;align-items:center;gap:8px;"><i class="fas fa-calendar-check" style="color:#00aaff;"></i> Recent Bookings</div>
+            <div id="adminRecentBookings" style="padding:16px 20px;font-size:13px;color:#718096;">Loading...</div>
+          </div>
+        </div>
+
+        <!-- BOOKINGS TAB -->
+        <div id="adminBookings" class="admin-tab">
+          <div style="background:#fff;border-radius:12px;box-shadow:0 1px 3px rgba(0,0,0,0.08);border:1px solid #e2e8f0;overflow:hidden;">
+            <div style="padding:16px 20px;border-bottom:1px solid #e2e8f0;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
+              <span style="font-size:14px;font-weight:600;color:#1a202c;display:flex;align-items:center;gap:8px;"><i class="fas fa-calendar-check" style="color:#00aaff;"></i> All Bookings</span>
+              <div style="display:flex;gap:8px;flex-wrap:wrap;">
+                <div style="position:relative;"><i class="fas fa-search" style="position:absolute;left:10px;top:50%;transform:translateY(-50%);color:#a0aec0;font-size:12px;"></i><input id="bookingSearch" type="text" placeholder="Search..." style="padding:8px 12px 8px 30px;border:1px solid #e2e8f0;border-radius:8px;font-size:12px;font-family:inherit;outline:none;width:180px;"></div>
+                <select id="bookingFilter" style="padding:8px 12px;border:1px solid #e2e8f0;border-radius:8px;font-size:12px;font-family:inherit;outline:none;cursor:pointer;">
+                  <option value="">All Status</option>
+                  <option value="PENDING">Pending</option>
+                  <option value="CONFIRMED">Confirmed</option>
+                  <option value="COMPLETED">Completed</option>
+                  <option value="CANCELLED">Cancelled</option>
+                </select>
+              </div>
+            </div>
+            <div style="overflow-x:auto;"><table id="bookingsTable" style="width:100%;border-collapse:collapse;font-size:13px;">
+              <thead><tr style="background:#f8fafc;">
+                <th style="padding:12px 16px;text-align:left;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.05em;color:#718096;border-bottom:1px solid #e2e8f0;white-space:nowrap;">#</th>
+                <th style="padding:12px 16px;text-align:left;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.05em;color:#718096;border-bottom:1px solid #e2e8f0;white-space:nowrap;">Customer</th>
+                <th style="padding:12px 16px;text-align:left;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.05em;color:#718096;border-bottom:1px solid #e2e8f0;white-space:nowrap;">Phone</th>
+                <th style="padding:12px 16px;text-align:left;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.05em;color:#718096;border-bottom:1px solid #e2e8f0;white-space:nowrap;">Service</th>
+                <th style="padding:12px 16px;text-align:left;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.05em;color:#718096;border-bottom:1px solid #e2e8f0;white-space:nowrap;">Date</th>
+                <th style="padding:12px 16px;text-align:left;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.05em;color:#718096;border-bottom:1px solid #e2e8f0;white-space:nowrap;">Status</th>
+                <th style="padding:12px 16px;text-align:left;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.05em;color:#718096;border-bottom:1px solid #e2e8f0;white-space:nowrap;">Actions</th>
+              </tr></thead>
+              <tbody id="bookingsTableBody"><tr><td colspan="7" style="padding:24px;text-align:center;color:#a0aec0;">Loading...</td></tr></tbody>
+            </table></div>
+          </div>
+        </div>
+
+        <!-- CONTACTS TAB -->
+        <div id="adminContacts" class="admin-tab">
+          <div style="background:#fff;border-radius:12px;box-shadow:0 1px 3px rgba(0,0,0,0.08);border:1px solid #e2e8f0;overflow:hidden;">
+            <div style="padding:16px 20px;border-bottom:1px solid #e2e8f0;font-size:14px;font-weight:600;color:#1a202c;display:flex;align-items:center;gap:8px;"><i class="fas fa-envelope" style="color:#00aaff;"></i> Contact Messages</div>
+            <div style="overflow-x:auto;"><table style="width:100%;border-collapse:collapse;font-size:13px;">
+              <thead><tr style="background:#f8fafc;">
+                <th style="padding:12px 16px;text-align:left;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.05em;color:#718096;border-bottom:1px solid #e2e8f0;">#</th>
+                <th style="padding:12px 16px;text-align:left;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.05em;color:#718096;border-bottom:1px solid #e2e8f0;">Name</th>
+                <th style="padding:12px 16px;text-align:left;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.05em;color:#718096;border-bottom:1px solid #e2e8f0;">Phone</th>
+                <th style="padding:12px 16px;text-align:left;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.05em;color:#718096;border-bottom:1px solid #e2e8f0;">Message</th>
+                <th style="padding:12px 16px;text-align:left;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.05em;color:#718096;border-bottom:1px solid #e2e8f0;">Date</th>
+              </tr></thead>
+              <tbody id="contactsTableBody"><tr><td colspan="5" style="padding:24px;text-align:center;color:#a0aec0;">Loading...</td></tr></tbody>
+            </table></div>
+          </div>
+        </div>
+
+        <!-- REVIEWS TAB -->
+        <div id="adminReviews" class="admin-tab">
+          <div style="background:#fff;border-radius:12px;box-shadow:0 1px 3px rgba(0,0,0,0.08);border:1px solid #e2e8f0;overflow:hidden;">
+            <div style="padding:16px 20px;border-bottom:1px solid #e2e8f0;font-size:14px;font-weight:600;color:#1a202c;display:flex;align-items:center;gap:8px;"><i class="fas fa-star" style="color:#00aaff;"></i> Customer Reviews</div>
+            <div style="overflow-x:auto;"><table style="width:100%;border-collapse:collapse;font-size:13px;">
+              <thead><tr style="background:#f8fafc;">
+                <th style="padding:12px 16px;text-align:left;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.05em;color:#718096;border-bottom:1px solid #e2e8f0;">#</th>
+                <th style="padding:12px 16px;text-align:left;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.05em;color:#718096;border-bottom:1px solid #e2e8f0;">Customer</th>
+                <th style="padding:12px 16px;text-align:left;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.05em;color:#718096;border-bottom:1px solid #e2e8f0;">Rating</th>
+                <th style="padding:12px 16px;text-align:left;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.05em;color:#718096;border-bottom:1px solid #e2e8f0;">Comment</th>
+                <th style="padding:12px 16px;text-align:left;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.05em;color:#718096;border-bottom:1px solid #e2e8f0;">Status</th>
+                <th style="padding:12px 16px;text-align:left;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.05em;color:#718096;border-bottom:1px solid #e2e8f0;">Actions</th>
+              </tr></thead>
+              <tbody id="reviewsTableBody"><tr><td colspan="6" style="padding:24px;text-align:center;color:#a0aec0;">Loading...</td></tr></tbody>
+            </table></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- CONTACT MESSAGE MODAL -->
+  <div id="adminContactModal" style="position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:9500;align-items:center;justify-content:center;">
+    <div style="background:#fff;border-radius:16px;padding:32px;max-width:480px;width:90%;box-shadow:0 20px 60px rgba(0,0,0,0.3);">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;">
+        <h3 id="adminContactModalName" style="font-size:16px;font-weight:600;color:#1a202c;"></h3>
+        <button id="adminContactModalClose" style="background:none;border:none;font-size:20px;cursor:pointer;color:#718096;">&#215;</button>
+      </div>
+      <div id="adminContactModalBody" style="font-size:13px;color:#4a5568;line-height:1.7;"></div>
+    </div>
+  </div>
+
+  <!-- ADMIN TOAST -->
+  <div id="adminToast" style="position:fixed;bottom:24px;right:24px;z-index:99999;align-items:center;gap:10px;padding:14px 20px;border-radius:10px;font-size:13px;font-weight:500;font-family:'Poppins',sans-serif;box-shadow:0 8px 24px rgba(0,0,0,0.15);min-width:240px;max-width:360px;"></div>
+
+  <!-- Admin Panel JavaScript -->
+  <script>
+  (function () {
+    'use strict';
+
+    const API = 'http://localhost:8080';
+    const ADMIN_PASSWORD = 'admin123';
+
+    /* ---------- state ---------- */
+    let bookingsData = [];
+    let refreshTimer = null;
+    let countdownInterval = null;
+    let countdownSec = 30;
+
+    /* ---------- element refs ---------- */
+    const elAdminEntryBtn       = document.getElementById('adminEntryBtn');
+    const elAdminEntryNavBtn    = document.getElementById('adminEntryNavBtn');
+    const elPasswordModal       = document.getElementById('adminPasswordModal');
+    const elPasswordInput       = document.getElementById('adminPasswordInput');
+    const elPasswordError       = document.getElementById('adminPasswordError');
+    const elPasswordSubmit      = document.getElementById('adminPasswordSubmit');
+    const elPasswordCancel      = document.getElementById('adminPasswordCancel');
+    const elAdminPanel          = document.getElementById('adminPanel');
+    const elAdminCloseBtn       = document.getElementById('adminCloseBtn');
+    const elAdminNav            = document.getElementById('adminNav');
+    const elAdminPageTitle      = document.getElementById('adminPageTitle');
+    const elRefreshBtn          = document.getElementById('adminRefreshBtn');
+    const elRefreshIcon         = document.getElementById('adminRefreshIcon');
+    const elRefreshCountdown    = document.getElementById('adminRefreshCountdown');
+    const elBookingSearch       = document.getElementById('bookingSearch');
+    const elBookingFilter       = document.getElementById('bookingFilter');
+    const elBookingsTableBody   = document.getElementById('bookingsTableBody');
+    const elContactsTableBody   = document.getElementById('contactsTableBody');
+    const elReviewsTableBody    = document.getElementById('reviewsTableBody');
+    const elRecentBookings      = document.getElementById('adminRecentBookings');
+    const elStatBookings        = document.getElementById('statTotalBookings');
+    const elStatContacts        = document.getElementById('statUnreadContacts');
+    const elStatReviews         = document.getElementById('statPendingReviews');
+    const elNavBookingBadge     = document.getElementById('adminNavBookingBadge');
+    const elNavContactBadge     = document.getElementById('adminNavContactBadge');
+    const elNavReviewBadge      = document.getElementById('adminNavReviewBadge');
+    const elContactModal        = document.getElementById('adminContactModal');
+    const elContactModalName    = document.getElementById('adminContactModalName');
+    const elContactModalBody    = document.getElementById('adminContactModalBody');
+    const elContactModalClose   = document.getElementById('adminContactModalClose');
+    const elToast               = document.getElementById('adminToast');
+
+    /* ---------- toast ---------- */
+    let toastTimeout = null;
+    function showToast(msg, type) {
+      // type: 'success' | 'error'
+      if (toastTimeout) clearTimeout(toastTimeout);
+      elToast.textContent = msg;
+      elToast.style.background = type === 'success' ? '#38a169' : '#e53e3e';
+      elToast.style.color = '#fff';
+      elToast.classList.add('visible');
+      toastTimeout = setTimeout(function () {
+        elToast.classList.remove('visible');
+      }, 3000);
+    }
+
+    /* ---------- password modal ---------- */
+    function openPasswordModal() {
+      elPasswordInput.value = '';
+      elPasswordError.style.display = 'none';
+      elPasswordModal.classList.add('visible');
+      setTimeout(function(){ elPasswordInput.focus(); }, 100);
+    }
+    elAdminEntryNavBtn.addEventListener('click', openPasswordModal);
+    elAdminEntryBtn.addEventListener('click', openPasswordModal);
+
+    elPasswordCancel.addEventListener('click', function () {
+      elPasswordModal.classList.remove('visible');
+    });
+
+    elPasswordModal.addEventListener('click', function (e) {
+      if (e.target === elPasswordModal) elPasswordModal.classList.remove('visible');
+    });
+
+    function submitPassword() {
+      var val = elPasswordInput.value;
+      if (val === ADMIN_PASSWORD) {
+        elPasswordModal.classList.remove('visible');
+        openAdminPanel();
+      } else {
+        elPasswordError.style.display = 'block';
+        elPasswordInput.value = '';
+        elPasswordInput.focus();
+      }
+    }
+
+    elPasswordSubmit.addEventListener('click', submitPassword);
+    elPasswordInput.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter') submitPassword();
+    });
+
+    /* ---------- open / close admin panel ---------- */
+    function openAdminPanel() {
+      elAdminPanel.classList.add('visible');
+      document.body.style.overflow = 'hidden';
+      loadAllData();
+      startAutoRefresh();
+    }
+
+    elAdminCloseBtn.addEventListener('click', closeAdminPanel);
+    function closeAdminPanel() {
+      elAdminPanel.classList.remove('visible');
+      document.body.style.overflow = '';
+      stopAutoRefresh();
+    }
+
+    /* ---------- auto-refresh ---------- */
+    function startAutoRefresh() {
+      stopAutoRefresh();
+      countdownSec = 30;
+      updateCountdownDisplay();
+      countdownInterval = setInterval(function () {
+        countdownSec--;
+        updateCountdownDisplay();
+        if (countdownSec <= 0) {
+          loadAllData();
+          countdownSec = 30;
+        }
+      }, 1000);
+    }
+
+    function stopAutoRefresh() {
+      if (countdownInterval) { clearInterval(countdownInterval); countdownInterval = null; }
+    }
+
+    function updateCountdownDisplay() {
+      elRefreshCountdown.textContent = 'Auto-refresh in ' + countdownSec + 's';
+    }
+
+    elRefreshBtn.addEventListener('click', function () {
+      elRefreshIcon.style.transform = 'rotate(360deg)';
+      elRefreshIcon.style.transition = 'transform 0.5s ease';
+      setTimeout(function () {
+        elRefreshIcon.style.transform = '';
+        elRefreshIcon.style.transition = '';
+      }, 500);
+      loadAllData();
+      countdownSec = 30;
+    });
+
+    /* ---------- nav / tabs ---------- */
+    var tabTitles = {
+      adminDashboard: 'Dashboard',
+      adminBookings:  'Bookings',
+      adminContacts:  'Contacts',
+      adminReviews:   'Reviews'
+    };
+
+    elAdminNav.addEventListener('click', function (e) {
+      var item = e.target.closest('.admin-nav-item');
+      if (!item) return;
+      var tab = item.dataset.tab;
+      switchTab(tab);
+    });
+
+    function switchTab(tab) {
+      document.querySelectorAll('.admin-nav-item').forEach(function (el) {
+        el.classList.remove('active');
+      });
+      document.querySelectorAll('.admin-tab').forEach(function (el) {
+        el.classList.remove('active');
+      });
+      var navItem = document.querySelector('.admin-nav-item[data-tab="' + tab + '"]');
+      if (navItem) navItem.classList.add('active');
+      var tabEl = document.getElementById(tab);
+      if (tabEl) tabEl.classList.add('active');
+      elAdminPageTitle.textContent = tabTitles[tab] || tab;
+    }
+
+    /* ---------- status badge ---------- */
+    function statusBadge(status) {
+      var colors = {
+        PENDING:   { bg: '#fff3cd', color: '#856404' },
+        CONFIRMED: { bg: '#d1e7dd', color: '#0a5740' },
+        COMPLETED: { bg: '#cfe2ff', color: '#084298' },
+        CANCELLED: { bg: '#f8d7da', color: '#842029' }
+      };
+      var c = colors[status] || { bg: '#e2e8f0', color: '#4a5568' };
+      return '<span style="display:inline-block;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:600;background:' + c.bg + ';color:' + c.color + ';">' + (status || 'UNKNOWN') + '</span>';
+    }
+
+    /* ---------- star rating display ---------- */
+    function starDisplay(rating) {
+      var out = '';
+      for (var i = 1; i <= 5; i++) {
+        out += '<span style="color:' + (i <= rating ? '#f6ad55' : '#e2e8f0') + ';font-size:14px;">&#9733;</span>';
+      }
+      return out;
+    }
+
+    /* ---------- format date ---------- */
+    function fmtDate(str) {
+      if (!str) return '&#8212;';
+      try {
+        var d = new Date(str);
+        return d.toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' });
+      } catch (e) { return str; }
+    }
+
+    /* ---------- load all data ---------- */
+    function loadAllData() {
+      loadBookings();
+      loadContacts();
+      loadReviews();
+    }
+
+    /* ===== BOOKINGS ===== */
+    function loadBookings() {
+      fetch(API + '/api/bookings')
+        .then(function (r) { return r.json(); })
+        .then(function (data) {
+          bookingsData = Array.isArray(data) ? data : (data.content || data.data || []);
+          renderBookingsTable(bookingsData);
+          renderRecentBookings(bookingsData);
+          updateBookingStats(bookingsData);
+        })
+        .catch(function () {
+          elBookingsTableBody.innerHTML = '<tr><td colspan="7" style="padding:24px;text-align:center;color:#a0aec0;">Failed to load bookings</td></tr>';
+          elRecentBookings.innerHTML = '<span style="color:#e53e3e;">Failed to load bookings</span>';
+        });
+    }
+
+    function updateBookingStats(data) {
+      elStatBookings.textContent = data.length;
+      var pending = data.filter(function (b) { return b.status === 'PENDING'; }).length;
+      if (pending > 0) {
+        elNavBookingBadge.textContent = pending;
+        elNavBookingBadge.style.display = 'flex';
+      } else {
+        elNavBookingBadge.style.display = 'none';
+      }
+    }
+
+    function renderBookingsTable(data) {
+      if (!data || data.length === 0) {
+        elBookingsTableBody.innerHTML = '<tr><td colspan="7" style="padding:24px;text-align:center;color:#a0aec0;">No bookings found</td></tr>';
+        return;
+      }
+      var html = '';
+      data.forEach(function (b, idx) {
+        var statusOptions = ['PENDING','CONFIRMED','COMPLETED','CANCELLED'].map(function (s) {
+          return '<option value="' + s + '"' + (b.status === s ? ' selected' : '') + '>' + s + '</option>';
+        }).join('');
+        html += '<tr class="admin-tr-hover">';
+        html += '<td style="padding:12px 16px;color:#718096;border-bottom:1px solid #f1f5f9;">' + (idx + 1) + '</td>';
+        html += '<td style="padding:12px 16px;color:#1a202c;font-weight:500;border-bottom:1px solid #f1f5f9;">' + esc(b.customerName || b.name || '&#8212;') + '</td>';
+        html += '<td style="padding:12px 16px;color:#4a5568;border-bottom:1px solid #f1f5f9;">' + esc(b.phone || '&#8212;') + '</td>';
+        html += '<td style="padding:12px 16px;color:#4a5568;border-bottom:1px solid #f1f5f9;">' + esc(b.serviceType || b.service || '&#8212;') + '</td>';
+        html += '<td style="padding:12px 16px;color:#4a5568;border-bottom:1px solid #f1f5f9;white-space:nowrap;">' + fmtDate(b.preferredDate || b.createdAt || b.bookingDate) + '</td>';
+        html += '<td style="padding:12px 16px;border-bottom:1px solid #f1f5f9;">' + statusBadge(b.status) + '</td>';
+        html += '<td style="padding:12px 16px;border-bottom:1px solid #f1f5f9;">';
+        html += '<div style="display:flex;gap:6px;align-items:center;">';
+        html += '<select data-id="' + b.id + '" class="admin-status-select" style="padding:5px 8px;border:1px solid #e2e8f0;border-radius:6px;font-size:12px;font-family:inherit;outline:none;">' + statusOptions + '</select>';
+        html += '<button class="admin-save-status" data-id="' + b.id + '" style="padding:5px 12px;background:#00aaff;color:#fff;border:none;border-radius:6px;font-size:12px;cursor:pointer;font-family:inherit;font-weight:500;white-space:nowrap;">Save</button>';
+        html += '</div>';
+        html += '</td>';
+        html += '</tr>';
+      });
+      elBookingsTableBody.innerHTML = html;
+
+      // attach save handlers
+      document.querySelectorAll('.admin-save-status').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          var id = btn.dataset.id;
+          var sel = document.querySelector('.admin-status-select[data-id="' + id + '"]');
+          var newStatus = sel ? sel.value : null;
+          if (!newStatus) return;
+          updateBookingStatus(id, newStatus, btn);
+        });
+      });
+    }
+
+    function updateBookingStatus(id, status, btn) {
+      btn.disabled = true;
+      btn.textContent = '...';
+      fetch(API + '/api/bookings/' + id + '/status', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status: status })
+      })
+        .then(function (r) {
+          if (!r.ok) throw new Error('Server error ' + r.status);
+          showToast('Status updated to ' + status, 'success');
+          loadBookings();
+        })
+        .catch(function (err) {
+          showToast('Failed to update status: ' + err.message, 'error');
+          btn.disabled = false;
+          btn.textContent = 'Save';
+        });
+    }
+
+    function renderRecentBookings(data) {
+      if (!data || data.length === 0) {
+        elRecentBookings.innerHTML = '<span style="color:#a0aec0;">No bookings yet</span>';
+        return;
+      }
+      var recent = data.slice(0, 5);
+      var html = '<table style="width:100%;border-collapse:collapse;font-size:13px;">';
+      recent.forEach(function (b) {
+        html += '<tr>';
+        html += '<td style="padding:8px 0;color:#1a202c;font-weight:500;width:30%;">' + esc(b.customerName || b.name || '&#8212;') + '</td>';
+        html += '<td style="padding:8px 0;color:#718096;width:30%;">' + esc(b.serviceType || b.service || '&#8212;') + '</td>';
+        html += '<td style="padding:8px 0;width:20%;">' + statusBadge(b.status) + '</td>';
+        html += '<td style="padding:8px 0;color:#a0aec0;text-align:right;width:20%;white-space:nowrap;">' + fmtDate(b.preferredDate || b.createdAt || b.bookingDate) + '</td>';
+        html += '</tr>';
+      });
+      html += '</table>';
+      elRecentBookings.innerHTML = html;
+    }
+
+    /* booking search + filter */
+    function applyBookingFilters() {
+      var search = (elBookingSearch.value || '').toLowerCase();
+      var filter = (elBookingFilter.value || '').toUpperCase();
+      var filtered = bookingsData.filter(function (b) {
+        var matchStatus = !filter || b.status === filter;
+        var matchSearch = !search ||
+          (b.customerName || b.name || '').toLowerCase().includes(search) ||
+          (b.phone || '').toLowerCase().includes(search) ||
+          (b.serviceType || b.service || '').toLowerCase().includes(search);
+        return matchStatus && matchSearch;
+      });
+      renderBookingsTable(filtered);
+    }
+
+    elBookingSearch.addEventListener('input', applyBookingFilters);
+    elBookingFilter.addEventListener('change', applyBookingFilters);
+
+    /* ===== CONTACTS ===== */
+    function loadContacts() {
+      fetch(API + '/api/contacts')
+        .then(function (r) { return r.json(); })
+        .then(function (data) {
+          var contacts = Array.isArray(data) ? data : (data.content || data.data || []);
+          renderContactsTable(contacts);
+          updateContactStats(contacts);
+        })
+        .catch(function () {
+          elContactsTableBody.innerHTML = '<tr><td colspan="5" style="padding:24px;text-align:center;color:#a0aec0;">Failed to load contacts</td></tr>';
+        });
+    }
+
+    function updateContactStats(contacts) {
+      var unread = contacts.filter(function (c) { return !c.read && !c.isRead && c.status !== 'READ'; }).length;
+      elStatContacts.textContent = unread;
+      if (unread > 0) {
+        elNavContactBadge.textContent = unread;
+        elNavContactBadge.style.display = 'flex';
+      } else {
+        elNavContactBadge.style.display = 'none';
+      }
+    }
+
+    function renderContactsTable(contacts) {
+      if (!contacts || contacts.length === 0) {
+        elContactsTableBody.innerHTML = '<tr><td colspan="5" style="padding:24px;text-align:center;color:#a0aec0;">No messages found</td></tr>';
+        return;
+      }
+      var html = '';
+      contacts.forEach(function (c, idx) {
+        var shortMsg = (c.message || '').substring(0, 60) + ((c.message || '').length > 60 ? '...' : '');
+        html += '<tr class="admin-tr-hover" data-contact-idx="' + idx + '">';
+        html += '<td style="padding:12px 16px;color:#718096;border-bottom:1px solid #f1f5f9;">' + (idx + 1) + '</td>';
+        html += '<td style="padding:12px 16px;color:#1a202c;font-weight:500;border-bottom:1px solid #f1f5f9;">' + esc(c.name || c.customerName || '&#8212;') + '</td>';
+        html += '<td style="padding:12px 16px;color:#4a5568;border-bottom:1px solid #f1f5f9;">' + esc(c.phone || '&#8212;') + '</td>';
+        html += '<td style="padding:12px 16px;color:#718096;border-bottom:1px solid #f1f5f9;max-width:280px;">' + esc(shortMsg || '&#8212;') + '</td>';
+        html += '<td style="padding:12px 16px;color:#a0aec0;border-bottom:1px solid #f1f5f9;white-space:nowrap;">' + fmtDate(c.createdAt || c.date) + '</td>';
+        html += '</tr>';
+      });
+      elContactsTableBody.innerHTML = html;
+
+      // row click opens modal
+      var storedContacts = contacts;
+      elContactsTableBody.querySelectorAll('tr[data-contact-idx]').forEach(function (row) {
+        row.addEventListener('click', function () {
+          var idx = parseInt(row.dataset.contactIdx);
+          var c = storedContacts[idx];
+          if (!c) return;
+          elContactModalName.textContent = (c.name || c.customerName || 'Unknown') + (c.phone ? ' \u2014 ' + c.phone : '');
+          elContactModalBody.innerHTML =
+            '<p style="margin-bottom:8px;"><strong>Email:</strong> ' + esc(c.email || 'N/A') + '</p>' +
+            '<p style="margin-bottom:8px;"><strong>Date:</strong> ' + fmtDate(c.createdAt || c.date) + '</p>' +
+            '<p style="margin-top:16px;background:#f8fafc;border-radius:8px;padding:14px;line-height:1.8;">' + esc(c.message || '').replace(/\n/g, '<br>') + '</p>';
+          elContactModal.classList.add('visible');
+        });
+      });
+    }
+
+    elContactModalClose.addEventListener('click', function () {
+      elContactModal.classList.remove('visible');
+    });
+    elContactModal.addEventListener('click', function (e) {
+      if (e.target === elContactModal) elContactModal.classList.remove('visible');
+    });
+
+    /* ===== REVIEWS ===== */
+    function loadReviews() {
+      fetch(API + '/api/reviews')
+        .then(function (r) { if (!r.ok) throw new Error('fail'); return r.json(); })
+        .then(function (data) {
+          var reviews = Array.isArray(data) ? data : (data.content || data.data || []);
+          renderReviewsTable(reviews);
+          updateReviewStats(reviews);
+        })
+        .catch(function () {
+          elReviewsTableBody.innerHTML = '<tr><td colspan="6" style="padding:24px;text-align:center;color:#a0aec0;">Failed to load reviews</td></tr>';
+        });
+    }
+
+    function updateReviewStats(reviews) {
+      var pending = reviews.filter(function (r) {
+        return r.status === 'PENDING' || r.approved === false || r.approved === null;
+      }).length;
+      elStatReviews.textContent = pending;
+      if (pending > 0) {
+        elNavReviewBadge.textContent = pending;
+        elNavReviewBadge.style.display = 'flex';
+      } else {
+        elNavReviewBadge.style.display = 'none';
+      }
+    }
+
+    function renderReviewsTable(reviews) {
+      if (!reviews || reviews.length === 0) {
+        elReviewsTableBody.innerHTML = '<tr><td colspan="6" style="padding:24px;text-align:center;color:#a0aec0;">No reviews found</td></tr>';
+        return;
+      }
+      var html = '';
+      reviews.forEach(function (r, idx) {
+        var isPending = r.status === 'PENDING' || r.approved === false || r.approved === null;
+        var isApproved = r.status === 'APPROVED' || r.approved === true;
+        var statusLabel = isApproved ? '<span style="color:#38a169;font-weight:600;font-size:12px;">Approved</span>'
+          : isPending ? '<span style="color:#dd6b20;font-weight:600;font-size:12px;">Pending</span>'
+          : '<span style="color:#e53e3e;font-weight:600;font-size:12px;">Rejected</span>';
+        var shortComment = (r.comment || r.review || '').substring(0, 60) + ((r.comment || r.review || '').length > 60 ? '...' : '');
+        html += '<tr>';
+        html += '<td style="padding:12px 16px;color:#718096;border-bottom:1px solid #f1f5f9;">' + (idx + 1) + '</td>';
+        html += '<td style="padding:12px 16px;color:#1a202c;font-weight:500;border-bottom:1px solid #f1f5f9;">' + esc(r.customerName || r.name || '&#8212;') + '</td>';
+        html += '<td style="padding:12px 16px;border-bottom:1px solid #f1f5f9;">' + starDisplay(r.rating || 0) + '</td>';
+        html += '<td style="padding:12px 16px;color:#718096;border-bottom:1px solid #f1f5f9;max-width:260px;">' + esc(shortComment || '&#8212;') + '</td>';
+        html += '<td style="padding:12px 16px;border-bottom:1px solid #f1f5f9;">' + statusLabel + '</td>';
+        html += '<td style="padding:12px 16px;border-bottom:1px solid #f1f5f9;">';
+        if (!isApproved) {
+          html += '<button class="admin-approve-btn" data-id="' + r.id + '" style="padding:5px 12px;background:#38a169;color:#fff;border:none;border-radius:6px;font-size:12px;cursor:pointer;font-family:inherit;font-weight:500;margin-right:6px;">Approve</button>';
+        }
+        if (!r.status || r.status !== 'REJECTED') {
+          html += '<button class="admin-reject-btn" data-id="' + r.id + '" style="padding:5px 12px;background:#e53e3e;color:#fff;border:none;border-radius:6px;font-size:12px;cursor:pointer;font-family:inherit;font-weight:500;">Reject</button>';
+        }
+        html += '</td>';
+        html += '</tr>';
+      });
+      elReviewsTableBody.innerHTML = html;
+
+      document.querySelectorAll('.admin-approve-btn').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          var id = btn.dataset.id;
+          btn.disabled = true;
+          btn.textContent = '...';
+          fetch(API + '/api/reviews/' + id + '/approve', { method: 'POST' })
+            .then(function (r) {
+              if (!r.ok) throw new Error('Server error');
+              showToast('Review approved', 'success');
+              loadReviews();
+            })
+            .catch(function () {
+              showToast('Failed to approve review', 'error');
+              btn.disabled = false;
+              btn.textContent = 'Approve';
+            });
+        });
+      });
+
+      document.querySelectorAll('.admin-reject-btn').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          var id = btn.dataset.id;
+          btn.disabled = true;
+          btn.textContent = '...';
+          fetch(API + '/api/reviews/' + id + '/reject', { method: 'POST' })
+            .then(function (r) {
+              if (!r.ok) throw new Error('Server error');
+              showToast('Review rejected', 'success');
+              loadReviews();
+            })
+            .catch(function () {
+              showToast('Failed to reject review', 'error');
+              btn.disabled = false;
+              btn.textContent = 'Reject';
+            });
+        });
+      });
+    }
+
+    /* ---------- escape HTML ---------- */
+    function esc(str) {
+      if (str === null || str === undefined) return '';
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+  }());
+  </script>
 </body>
 </html>
