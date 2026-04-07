@@ -1,0 +1,66 @@
+# =============================================================================
+# podman-compose.yml - All Weather Solution
+# =============================================================================
+# Equivalent of docker-compose.yml but for Podman.
+#
+# Usage:
+#   pip install podman-compose
+#   podman-compose up -d
+#
+# Or use the setup-db.sh script which handles the MySQL container setup
+# with a readiness check, which podman-compose does not do by itself.
+# =============================================================================
+
+version: "3.8"
+
+services:
+
+  # ── MySQL 8.0 Database ──────────────────────────────────────────────────────
+  mysql:
+    image: mysql:8.0
+    container_name: allweather-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: RootAllWeather@2024
+      MYSQL_DATABASE: allweather_db
+      MYSQL_USER: allweather_user
+      MYSQL_PASSWORD: AllWeather@2024
+    ports:
+      - "3306:3306"
+    volumes:
+      - allweather_mysql_data:/var/lib/mysql
+    command: >
+      --character-set-server=utf8mb4
+      --collation-server=utf8mb4_unicode_ci
+      --default-authentication-plugin=mysql_native_password
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "--password=RootAllWeather@2024"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+
+  # ── Spring Boot Backend ─────────────────────────────────────────────────────
+  # Uncomment this section after building the JAR:
+  #   cd backend && mvn package -DskipTests
+  #
+  # backend:
+  #   image: eclipse-temurin:17-jre
+  #   container_name: allweather-backend
+  #   restart: unless-stopped
+  #   depends_on:
+  #     mysql:
+  #       condition: service_healthy
+  #   ports:
+  #     - "8080:8080"
+  #   volumes:
+  #     - ./backend/target/allweather-backend-1.0.0.jar:/app/app.jar
+  #   command: java -jar /app/app.jar
+  #   environment:
+  #     SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/allweather_db?useSSL=false&serverTimezone=Asia/Kolkata&allowPublicKeyRetrieval=true
+  #     SPRING_DATASOURCE_USERNAME: allweather_user
+  #     SPRING_DATASOURCE_PASSWORD: AllWeather@2024
+
+volumes:
+  allweather_mysql_data:
+    driver: local
